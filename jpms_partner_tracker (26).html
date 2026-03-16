@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JPMS Partner Registration Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#f5f3ee; --surface:#fff; --surface2:#f0ede6;
+    --ink:#1a1916; --ink2:#6b6860; --ink3:#a8a49d;
+    --green:#2d6a4f; --green-bg:#d8f3dc;
+    --red:#8b2500;   --red-bg:#ffe5d9;
+    --amber:#7d4e00; --amber-bg:#fff3cd;
+    --blue:#1a3c6e;  --blue-bg:#dce8f7;
+    --border:#e0dbd2; --accent:#c8a96e;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+
+  header{background:var(--ink);color:#f5f3ee;padding:2rem 2.5rem;display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+  .hl h1{font-family:'Instrument Serif',serif;font-size:2rem;font-weight:400;letter-spacing:-.02em;line-height:1.1}
+  .hl h1 em{font-style:italic;color:var(--accent)}
+  .hl p{font-size:13px;color:#a8a49d;margin-top:6px;font-family:'DM Mono',monospace}
+  .hbtns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .btn{background:transparent;border:1px solid #3d3c38;color:#f5f3ee;font-family:'DM Mono',monospace;font-size:12px;padding:8px 16px;cursor:pointer;border-radius:4px;display:flex;align-items:center;gap:6px;transition:background .2s}
+  .btn:hover{background:#2d2c29}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .spin{display:inline-block}
+  .btn.loading .spin{animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .live-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;display:inline-block;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+  .main{padding:2rem 2.5rem;max-width:1100px}
+  .banner{padding:.75rem 1rem;border-radius:8px;font-size:12.5px;margin-bottom:1.5rem;display:flex;gap:8px;align-items:center;line-height:1.5}
+  .banner.loading-banner{background:var(--blue-bg);color:var(--blue);border:1px solid #9bbfe0}
+  .banner.success{background:var(--green-bg);color:var(--green);border:1px solid #a8d8b8}
+  .banner.error{background:var(--red-bg);color:var(--red);border:1px solid #f4a58a}
+
+  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1rem}
+  .att-box{grid-column:1 / 2;margin-bottom:0!important}
+  .sc{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.1rem 1.25rem}
+  .sc .lb{font-size:11px;font-family:'DM Mono',monospace;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+  .sc .vl{font-size:2rem;font-family:'Instrument Serif',serif;font-weight:400;line-height:1}
+  .vg{color:var(--green)} .vr{color:var(--red)} .va{color:var(--amber)} .vb{color:var(--blue)}
+
+  .controls{display:flex;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center}
+  .fg{display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;background:var(--surface);flex-wrap:wrap;width:100%}
+  .fb{flex:1;padding:10px 8px;font-size:12px;background:none;border:none;border-right:1px solid var(--border);cursor:pointer;color:var(--ink2);transition:background .15s,color .15s;text-align:center}
+  .fb:last-child{border-right:none}
+  .fb.active{background:var(--ink);color:#f5f3ee}
+  .fb:hover:not(.active){background:var(--surface2)}
+  .sw{flex:1;min-width:100%;position:relative}
+  .sw input{width:100%;padding:10px 12px 10px 32px;border:1px solid var(--border);border-radius:6px;font-size:14px;background:var(--surface);color:var(--ink);outline:none;font-family:'DM Sans',sans-serif}
+  .sw input:focus{border-color:var(--ink3)}
+  .si{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:13px;pointer-events:none}
+
+  /* Mobile card view instead of table */
+  .tw{background:transparent;border:none;border-radius:0;overflow:visible}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  thead tr{background:var(--surface2);border-bottom:1px solid var(--border)}
+  th{padding:10px 14px;text-align:left;font-size:11px;font-family:'DM Mono',monospace;font-weight:500;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em;cursor:pointer;white-space:nowrap;user-select:none}
+  th:hover{color:var(--ink)}
+  td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:#faf9f6}
+  .pname{font-weight:500}
+  .table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+
+  @media(max-width:700px){
+    header,.main{padding:1.25rem}
+    .hl h1{font-size:1.3rem}
+    .hl p{font-size:11px}
+    .stats-row{grid-template-columns:repeat(2,1fr)}
+    .att-box{grid-column:1 / 3}
+    table{display:none}
+    .mobile-cards{display:block}
+  }
+  @media(min-width:701px){
+    .mobile-cards{display:none}
+    .table-wrap table{display:table}
+  }
+  .mobile-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:10px}
+  .mobile-card .mc-name{font-weight:600;font-size:15px;margin-bottom:8px}
+  .mobile-card .mc-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px}
+  .mobile-card .mc-row:last-child{border-bottom:none;padding-bottom:0}
+  .mobile-card .mc-label{color:var(--ink2);font-size:11px;font-family:'DM Mono',monospace;text-transform:uppercase}
+  .mobile-card .mc-att{font-size:12px;color:var(--ink2);margin-top:8px;line-height:1.8}
+
+  .badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-family:'DM Mono',monospace;padding:3px 9px;border-radius:20px;font-weight:500;white-space:nowrap}
+  .b-not {background:var(--red-bg);  color:var(--red)}
+  .b-both{background:var(--blue-bg); color:var(--blue)}
+  .b-ps  {background:var(--green-bg);color:var(--green)}
+  .b-ttt {background:var(--amber-bg);color:var(--amber)}
+  .b-reg {background:var(--green-bg);color:var(--green)}
+  .b-tps {background:var(--green-bg);color:var(--green);font-size:10px!important;padding:1px 6px!important}
+  .b-tt  {background:var(--amber-bg);color:var(--amber);font-size:10px!important;padding:1px 6px!important}
+
+  .alist{font-size:12px;color:var(--ink2);line-height:2}
+  .muted{color:var(--ink3);font-size:12px}
+  .stbox{text-align:center;padding:3rem;color:var(--ink2);font-size:14px}
+  .lu{font-size:12px;font-family:'DM Mono',monospace;color:var(--ink3);margin-top:1rem;text-align:right}
+</style>
+</head>
+<body>
+<header>
+  <div class="hl">
+    <h1>JPMS <em>Partner Summit & TTT</em> | Live Registrations</h1>
+    <p>JPMS Partner Summit 2026 (Oct 23 & 24) · JPMS Train the Trainer 2026 (Oct 25 & 26)</p>
+  </div>
+  <div class="hbtns">
+    <button class="btn" id="rbtn" onclick="loadData()"><span class="spin">↻</span> Refresh</button>
+    <span id="live-indicator" style="display:none;color:#4ade80;font-family:'DM Mono',monospace;font-size:12px;gap:6px;align-items:center">
+      <span class="live-dot"></span> Live
+    </span>
+  </div>
+</header>
+
+<div class="main">
+  <div id="banner-area"></div>
+
+  <div class="stats-row">
+    <div class="sc" style="background:#c8a96e;border-color:#b8935a"><div class="lb" style="color:rgba(255,255,255,0.8)"># of Distributors registered so far</div><div class="vl" style="color:#fff" id="s-tot">—</div></div>
+    <div class="sc"><div class="lb"># of Distributors registered for both events</div><div class="vl vg" id="s-bth">—</div></div>
+    <div class="sc"><div class="lb"># of Distributors registered for Summit only</div><div class="vl va" id="s-ps">—</div></div>
+    <div class="sc"><div class="lb"># of Distributors registered for TTT only</div><div class="vl vb" id="s-ttt">—</div></div>
+    <div class="sc att-box" style="display:flex;gap:2rem;flex-wrap:wrap">
+      <div><div class="lb" style="font-size:10px">Summit attendees</div><div style="font-size:1.2rem;font-family:'Instrument Serif',serif;color:var(--green)" id="s-psc">—</div></div>
+      <div style="width:1px;background:var(--border)"></div>
+      <div><div class="lb" style="font-size:10px">TTT attendees</div><div style="font-size:1.2rem;font-family:'Instrument Serif',serif;color:var(--amber)" id="s-tttc">—</div></div>
+    </div>
+  </div>
+  <div class="controls">
+    <div class="fg">
+      <button class="fb active" onclick="sf('both',this)">Both events</button>
+      <button class="fb" onclick="sf('ps',this)">Summit only</button>
+      <button class="fb" onclick="sf('ttt',this)">TTT only</button>
+    </div>
+    <div class="sw">
+      <span class="si">⌕</span>
+      <input type="text" id="search" placeholder="Search partner…" oninput="renderTable()">
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <div class="stbox" id="loading-state">Loading live data…</div>
+    <table id="mtable" style="display:none">
+      <thead><tr>
+        <th onclick="sortBy('name')">Partner ↕</th>
+        <th onclick="sortBy('status')">Status ↕</th>
+        <th onclick="sortBy('ps')">Partner Summit ↕</th>
+        <th onclick="sortBy('ttt')" style="color:var(--amber)">Train the Trainer ↕</th>
+        <th class="ac">Registered attendees</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <div class="mobile-cards" id="mcards"></div>
+  <div class="lu" id="lu"></div>
+</div>
+
+<script>
+// ── Your Apps Script endpoint ─────────────────────────────────────────────
+const API_URL = 'https://script.google.com/macros/s/AKfycbwUILSheBubU2uQwApkhvq-lE1jKv7WlfupHDjBPGHHw1WVo6tXDAghjQAuUZ77pHpn/exec';
+
+// ── Fallback snapshot (March 2026) ────────────────────────────────────────
+const FALLBACK = [{"name":"BeNeLux - Ministry of Beauty","status":"both","ps":["Christian Lataster","Levi Groenberg"],"ttt":["AnnaSofie Damen","Annemieke van Drunen","Bianca de Man","Kim Wigger"]},{"name":"Cyprus - AAE.com","status":"both","ps":["Evi Panayiotou","Panayiotis Panayiotou"],"ttt":["Marianna Papanastasiou"]},{"name":"Denmark - G&G Danmark","status":"ps","ps":["Jesper Löfvall","Renée Löfvall","Theis Löfvall"],"ttt":[]},{"name":"Germany - Wild Beauty","status":"ps","ps":["Bastian Rittgen","Kristin Petrelli","Massimo Petrelli"],"ttt":[]},{"name":"Iceland - Arctic Trading Company","status":"both","ps":["Erla Einarsdóttir"],"ttt":["Erla Einarsdóttir","Nína Leifsdóttir"]},{"name":"Israel - SHH Footwear","status":"both","ps":["Eran Hemed","Guy Spencer","Inbal Spencer"],"ttt":["Guy Spencer"]},{"name":"Italy - IDM","status":"ps","ps":["ivan nasso","michele nardi"],"ttt":[]},{"name":"Lithuania - UAB Grazvalda","status":"both","ps":["Andrius Striaukas","Kristina Petraitiene"],"ttt":["Evaldas Valantiejus","Gabriele Sutkiene","Giedre Azlauskiene","Kristina Petraitiene"]},{"name":"Norway - Cutrin","status":"both","ps":["Iida Lie","Jan Madsen"],"ttt":["Sunniva Hope","Thomas Moe Tonning"]},{"name":"Portugal - Cosmenatura","status":"ps","ps":["Alexandre Costa","Fernando Leal"],"ttt":[]},{"name":"Romania - Beauty One","status":"both","ps":["Alexandru Sofelea","Beauty one medical europa Galani ALice","george draghia","Roxana Sofelea"],"ttt":["amalia matache matache","Claudia Muresan","Gina Aron","Laurentiu teodor","Marian Capet","Vetuta Topuzu"]},{"name":"Slovenia - Pronega","status":"both","ps":["Katarina Mole","Klemen Bajt","Tomaz Leban"],"ttt":["Aska Kajtazović","Manó Kolarič","Matej Prinčič","Matjaž Okorn","Tomaž Turk"]},{"name":"South Africa - Twincare","status":"both","ps":["Andrea Gavriel"],"ttt":["Leann Salzmann","Natasha Summers"]},{"name":"Spain - Hair Addiciton","status":"both","ps":["CARLOS SANAGUSTIN MARTIN","JOSE ANTONIO SALUEÑA","JUAN LUIS ARREGUI"],"ttt":["CARLOS SANAGUSTIN MARTIN","JOSE ANTONIO SALUEÑA","JUAN LUIS ARREGUI"]},{"name":"Sweden - Aktor Produktion","status":"ttt","ps":[],"ttt":["Carina Hokeroth","Sofie Erikssom"]},{"name":"United Kingdom - Sweet Squared","status":"both","ps":["JOHN HURINE","Mark Shorrock","Samantha Sweet","Samuel Sweet","VICTORIA PARKER","VICTORIA SARGESON"],"ttt":["Gary Young","Kiri Constatinou","Laura Van flute","Natalie Ashworth","victoria Parker (Panting)"]}];
+
+let allData = [], curFilter = 'both', sortCol = 'status', sortDir = 1;
+
+async function loadData() {
+  const btn = document.getElementById('rbtn');
+  btn.classList.add('loading');
+  btn.disabled = true;
+  document.getElementById('loading-state').style.display = 'block';
+  document.getElementById('mtable').style.display = 'none';
+  setBanner('loading-banner', '⟳ Fetching live data from Google Sheets…');
+
+  try {
+    // Fetch directly from Apps Script — works when hosted on a proper domain
+    const r = await fetch(API_URL);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const json = await r.json();
+    if (json.error) throw new Error(json.error);
+    if (!json.data || json.data.length === 0) throw new Error('No data returned');
+
+    allData = json.data;
+    const updated = json.updated
+      ? new Date(json.updated).toLocaleString('en-GB', {dateStyle:'medium', timeStyle:'short'})
+      : new Date().toLocaleString('en-GB', {dateStyle:'medium', timeStyle:'short'});
+
+    setBanner('success', `<span class="live-dot" style="width:7px;height:7px;border-radius:50%;background:#2d6a4f;display:inline-block;margin-right:4px"></span> Live data loaded · ${updated}`);
+    document.getElementById('lu').textContent = 'Live · Last updated: ' + updated;
+
+  } catch(err) {
+    // Fall back to snapshot
+    allData = FALLBACK;
+    setBanner('error', '⚠ Could not reach live data — showing snapshot from March 2026. (' + err.message + ')');
+    document.getElementById('lu').textContent = 'Snapshot · March 2026';
+  }
+
+  updateStats();
+  renderTable();
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('mtable').style.display = 'table';
+  btn.classList.remove('loading');
+  btn.disabled = false;
+}
+
+function setBanner(cls, msg) {
+  document.getElementById('banner-area').innerHTML =
+    `<div class="banner ${cls}">${msg}</div>`;
+}
+
+function updateStats() {
+  document.getElementById('s-tot').textContent = allData.length;
+  document.getElementById('s-bth').textContent = allData.filter(d=>d.status==='both').length;
+  document.getElementById('s-ps' ).textContent = allData.filter(d=>d.status==='ps').length;
+  document.getElementById('s-ttt').textContent = allData.filter(d=>d.status==='ttt').length;
+  document.getElementById('s-psc').textContent = allData.reduce((n,d)=>n+d.ps.length,0);
+  document.getElementById('s-tttc').textContent = allData.reduce((n,d)=>n+d.ttt.length,0);
+}
+
+function sf(f, btn) {
+  curFilter = f;
+  document.querySelectorAll('.fb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable();
+}
+
+function sortBy(col) {
+  sortDir = sortCol===col ? sortDir*-1 : 1;
+  sortCol = col;
+  renderTable();
+}
+
+function renderTable() {
+  const q = document.getElementById('search').value.toLowerCase();
+  let data = allData.filter(d => {
+    if (curFilter !== 'all') return d.status === curFilter;
+    return true;
+  }).filter(d => !q || d.name.toLowerCase().includes(q));
+
+  const so = {both:0,ps:1,ttt:2,not:3};
+  data.sort((a,b) => {
+    if (sortCol==='name')   return sortDir*a.name.localeCompare(b.name);
+    if (sortCol==='status') return sortDir*(so[a.status]-so[b.status]);
+    if (sortCol==='ps')     return sortDir*(b.ps.length-a.ps.length);
+    if (sortCol==='ttt')    return sortDir*(b.ttt.length-a.ttt.length);
+    return 0;
+  });
+
+  const tbody = document.getElementById('tbody');
+  const mcards = document.getElementById('mcards');
+
+  if (!data.length) {
+    tbody.innerHTML = `<tr><td colspan="5"><div class="stbox">No partners match this filter.</div></td></tr>`;
+    mcards.innerHTML = `<div class="stbox">No partners match this filter.</div>`;
+    return;
+  }
+
+  const sb = {both:'b-both',ps:'b-ps',ttt:'b-ttt',not:'b-not'};
+  const sl = {both:'✓ Both events',ps:'✓ Summit only',ttt:'✓ TTT only',not:'✗ Not registered'};
+
+  tbody.innerHTML = data.map(d => {
+    const psc  = d.ps.length  ? `<span class="badge b-reg">✓ ${d.ps.length}</span>`  : `<span class="muted">—</span>`;
+    const tttc = d.ttt.length ? `<span class="badge b-ttt">✓ ${d.ttt.length}</span>` : `<span class="muted">—</span>`;
+    const all  = [...new Set([...d.ps,...d.ttt])];
+    const att  = all.length
+      ? `<div class="alist">${all.map(a => {
+          const t = [
+            d.ps.includes(a)  ? '<span class="badge b-tps">PS</span>'  : '',
+            d.ttt.includes(a) ? '<span class="badge b-tt">TTT</span>' : ''
+          ].filter(Boolean).join(' ');
+          return `<span>${esc(a)} ${t}</span>`;
+        }).join('<br>')}</div>`
+      : `<span class="muted">—</span>`;
+    return `<tr>
+      <td class="pname">${esc(d.name)}</td>
+      <td><span class="badge ${sb[d.status]}">${sl[d.status]}</span></td>
+      <td>${psc}</td><td>${tttc}</td>
+      <td class="ac">${att}</td>
+    </tr>`;
+  }).join('');
+
+  // Mobile cards
+  mcards.innerHTML = data.map(d => {
+    const psNames  = d.ps.length  ? d.ps.map(a=>`<span>${esc(a)} <span class="badge b-tps">PS</span></span>`).join('<br>') : '<span class="muted">—</span>';
+    const tttNames = d.ttt.length ? d.ttt.map(a=>`<span>${esc(a)} <span class="badge b-tt">TTT</span></span>`).join('<br>') : '<span class="muted">—</span>';
+    return `<div class="mobile-card">
+      <div class="mc-name">${esc(d.name)}</div>
+      <div class="mc-row">
+        <span class="mc-label">Status</span>
+        <span class="badge ${sb[d.status]}">${sl[d.status]}</span>
+      </div>
+      <div class="mc-row">
+        <span class="mc-label">Partner Summit</span>
+        <span class="badge b-reg">${d.ps.length} attendee${d.ps.length!==1?'s':''}</span>
+      </div>
+      <div class="mc-row">
+        <span class="mc-label">Train the Trainer</span>
+        <span class="badge b-ttt">${d.ttt.length} attendee${d.ttt.length!==1?'s':''}</span>
+      </div>
+      <div class="mc-att">${psNames}${d.ttt.length ? '<br>'+tttNames : ''}</div>
+    </div>`;
+  }).join('');
+}
+
+
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+loadData();
+</script>
+</body>
+</html>
