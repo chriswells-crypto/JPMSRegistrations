@@ -109,7 +109,7 @@
     <p>Partner Summit 2026 (Oct 23 & 24) · Train the Trainer 2026 (Oct 25 & 26)</p>
   </div>
   <div class="hbtns">
-    <span style="font-family:'DM Mono',monospace;font-size:10px;color:#a8a49d;margin-right:8px">v1.1</span>
+    <span style="font-family:'DM Mono',monospace;font-size:10px;color:#a8a49d;margin-right:8px">v1.2</span>
     <button class="btn" onclick="exportExcel()">⬇ Excel</button>
     <button class="btn" onclick="exportPDF()">⬇ PDF</button>
     <button class="btn" id="rbtn" onclick="loadData()"><span class="spin">↻</span> Refresh</button>
@@ -193,7 +193,7 @@ async function loadData() {
   setBanner('loading-banner', '⟳ Fetching live data from Google Sheets…');
 
   try {
-    const r = await fetch(API_URL);
+    const r = await fetch(API_URL, { redirect: 'follow' });
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const json = await r.json();
     if (json.error) throw new Error(json.error);
@@ -282,7 +282,13 @@ function updateStats() {
   document.getElementById('s-ps-dist').textContent  = psDist;
   document.getElementById('s-ttt-dist').textContent = tttDist;
   const notReg = allData.filter(d=>d.status==='not').length;
-  const count2025 = allData.filter(d => old2025.includes(d.name.toLowerCase()) && d.status === 'not').length;
+  const count2025 = allData.filter(d => d.status === 'not' && old2025.some(oldName => {
+    const n = d.name.toLowerCase();
+    const dn = (d.displayName||'').toLowerCase();
+    return n.includes(oldName) || oldName.includes(n) ||
+           dn.includes(oldName) || oldName.includes(dn) ||
+           oldName.split(/[\s\-]+/).filter(w=>w.length>=5).some(w => n.includes(w) || dn.includes(w));
+  })).length;
   document.getElementById('fb-both').textContent = '— ' + both + ' Distributor Partners';
   document.getElementById('fb-not').textContent  = '— ' + notReg + ' Distributor Partners';
   document.getElementById('fb-ps').textContent   = '— ' + ps + ' Distributor Partners';
@@ -310,7 +316,15 @@ function renderTable() {
     if (curFilter === 'not') return d.status === 'not';
     if (curFilter === '2025') {
       // Booked in 2025 but NOT registered for 2026 PS or TTT
-      return old2025.includes(d.name.toLowerCase()) && d.status === 'not';
+      // Match by checking if any old2025 name is contained in or contains the booking name
+      return d.status === 'not' && old2025.some(oldName => {
+        const n = d.name.toLowerCase();
+        const dn = (d.displayName||'').toLowerCase();
+        return n.includes(oldName) || oldName.includes(n) ||
+               dn.includes(oldName) || oldName.includes(dn) ||
+               // word overlap — match key words 5+ chars
+               oldName.split(/[\s\-]+/).filter(w=>w.length>=5).some(w => n.includes(w) || dn.includes(w));
+      });
     }
     return d.status === curFilter;
   }).filter(d => {
