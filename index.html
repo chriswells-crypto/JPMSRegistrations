@@ -35,10 +35,10 @@
   .main{padding:2rem 2.5rem;max-width:1100px}
   .banner{padding:.75rem 1rem;border-radius:8px;font-size:12.5px;margin-bottom:1.5rem;display:flex;gap:8px;align-items:center;line-height:1.5}
   .banner.loading-banner{background:var(--blue-bg);color:var(--blue);border:1px solid #9bbfe0}
-  .banner.success{background:var(--green-bg);color:var(--green);border:1px solid #a8d8b8}
+  .banner.success{background:#00ff6a;color:#003d1a;border:1px solid #00cc55}
   .banner.error{background:var(--red-bg);color:var(--red);border:1px solid #f4a58a}
 
-  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1rem}
+  .stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:1rem}
   .att-box{grid-column:1 / 2;margin-bottom:0!important}
   .sc{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.1rem 1.25rem}
   .sc .lb{font-size:11px;font-family:'DM Mono',monospace;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
@@ -56,37 +56,15 @@
   .sw input:focus{border-color:var(--ink3)}
   .si{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:13px;pointer-events:none}
 
-  /* Mobile card view instead of table */
-  .tw{background:transparent;border:none;border-radius:0;overflow:visible}
+  .table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
   table{width:100%;border-collapse:collapse;font-size:13.5px}
   thead tr{background:var(--surface2);border-bottom:1px solid var(--border)}
   th{padding:10px 14px;text-align:left;font-size:11px;font-family:'DM Mono',monospace;font-weight:500;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em;cursor:pointer;white-space:nowrap;user-select:none}
   th:hover{color:var(--ink)}
   td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
   tr:last-child td{border-bottom:none}
-  tr:hover td{background:#faf9f6}
+  tr:hover td{background:rgba(0,0,0,0.03)}
   .pname{font-weight:500}
-  .table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
-
-  @media(max-width:700px){
-    header,.main{padding:1.25rem}
-    .hl h1{font-size:1.3rem}
-    .hl p{font-size:11px}
-    .stats-row{grid-template-columns:repeat(2,1fr)}
-    .att-box{grid-column:1 / 3}
-    table{display:none}
-    .mobile-cards{display:block}
-  }
-  @media(min-width:701px){
-    .mobile-cards{display:none}
-    .table-wrap table{display:table}
-  }
-  .mobile-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:10px}
-  .mobile-card .mc-name{font-weight:600;font-size:15px;margin-bottom:8px}
-  .mobile-card .mc-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px}
-  .mobile-card .mc-row:last-child{border-bottom:none;padding-bottom:0}
-  .mobile-card .mc-label{color:var(--ink2);font-size:11px;font-family:'DM Mono',monospace;text-transform:uppercase}
-  .mobile-card .mc-att{font-size:12px;color:var(--ink2);margin-top:8px;line-height:1.8}
 
   .badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-family:'DM Mono',monospace;padding:3px 9px;border-radius:20px;font-weight:500;white-space:nowrap}
   .b-not {background:var(--red-bg);  color:var(--red)}
@@ -101,41 +79,80 @@
   .muted{color:var(--ink3);font-size:12px}
   .stbox{text-align:center;padding:3rem;color:var(--ink2);font-size:14px}
   .lu{font-size:12px;font-family:'DM Mono',monospace;color:var(--ink3);margin-top:1rem;text-align:right}
+
+  .mobile-cards{display:none}
+  @media(max-width:700px){
+    header{padding:1rem;flex-direction:column;align-items:flex-start}
+    .hl h1{font-size:1.1rem}
+    .hl p{font-size:10px}
+    .hbtns{width:100%;justify-content:flex-start}
+    .btn{font-size:11px;padding:6px 10px}
+    .main{padding:1rem}
+    .stats-row{grid-template-columns:1fr}
+    .fg{flex-wrap:wrap}
+    .fb{flex:1 1 45%;font-size:11px;padding:8px 4px}
+    table{display:none}
+    .mobile-cards{display:block}
+  }
+  .mobile-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:10px}
+  .mobile-card .mc-name{font-weight:600;font-size:15px;margin-bottom:8px}
+  .mobile-card .mc-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px}
+  .mobile-card .mc-row:last-child{border-bottom:none;padding-bottom:0}
+  .mobile-card .mc-label{color:var(--ink2);font-size:11px;font-family:'DM Mono',monospace;text-transform:uppercase}
+  .mobile-card .mc-att{font-size:12px;color:var(--ink2);margin-top:8px;line-height:1.8}
 </style>
 </head>
 <body>
 <header>
   <div class="hl">
-    <h1>JPMS <em>Partner Summit & TTT</em> | Live Registrations</h1>
-    <p>JPMS Partner Summit 2026 (Oct 23 & 24) · JPMS Train the Trainer 2026 (Oct 25 & 26)</p>
+    <h1>JPMS <em>Partner Summit & Train the Trainer</em> | Live Registrations</h1>
+    <p>Partner Summit 2026 (Oct 23 & 24) · Train the Trainer 2026 (Oct 25 & 26)</p>
   </div>
   <div class="hbtns">
+    <span style="font-family:'DM Mono',monospace;font-size:10px;color:#a8a49d;margin-right:8px">v1.1</span>
+    <button class="btn" onclick="exportExcel()">⬇ Excel</button>
+    <button class="btn" onclick="exportPDF()">⬇ PDF</button>
     <button class="btn" id="rbtn" onclick="loadData()"><span class="spin">↻</span> Refresh</button>
-    <span id="live-indicator" style="display:none;color:#4ade80;font-family:'DM Mono',monospace;font-size:12px;gap:6px;align-items:center">
-      <span class="live-dot"></span> Live
-    </span>
   </div>
 </header>
 
 <div class="main">
   <div id="banner-area"></div>
 
+
   <div class="stats-row">
-    <div class="sc" style="background:#c8a96e;border-color:#b8935a"><div class="lb" style="color:rgba(255,255,255,0.8)"># of Distributors registered so far</div><div class="vl" style="color:#fff" id="s-tot">—</div></div>
-    <div class="sc"><div class="lb"># of Distributors registered for both events</div><div class="vl vg" id="s-bth">—</div></div>
-    <div class="sc"><div class="lb"># of Distributors registered for Summit only</div><div class="vl va" id="s-ps">—</div></div>
-    <div class="sc"><div class="lb"># of Distributors registered for TTT only</div><div class="vl vb" id="s-ttt">—</div></div>
-    <div class="sc att-box" style="display:flex;gap:2rem;flex-wrap:wrap">
-      <div><div class="lb" style="font-size:10px">Summit attendees</div><div style="font-size:1.2rem;font-family:'Instrument Serif',serif;color:var(--green)" id="s-psc">—</div></div>
-      <div style="width:1px;background:var(--border)"></div>
-      <div><div class="lb" style="font-size:10px">TTT attendees</div><div style="font-size:1.2rem;font-family:'Instrument Serif',serif;color:var(--amber)" id="s-tttc">—</div></div>
+    <div class="sc" style="background:#c8a96e;border-color:#b8935a"><div class="lb" style="color:rgba(255,255,255,0.8)"># of Distributors registered for both events, Summit only, or TTT only</div><div class="vl" style="color:#fff;display:flex;align-items:baseline;gap:4px"><span id="s-tot">—</span><span style="font-size:1rem;opacity:0.8">/ <span id="s-total-dist">—</span></span></div></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:12px">
+    <div class="sc" style="background:#d8f3dc;border-color:#a8d8b8">
+      <div class="lb" style="color:#2d6a4f">Partner Summit Attendees</div>
+      <div class="vl" style="color:#2d6a4f" id="s-psc">—</div>
+    </div>
+    <div class="sc" style="background:#d8f3dc;border-color:#a8d8b8">
+      <div class="lb" style="color:#2d6a4f">Partner Summit Distributor Partners</div>
+      <div class="vl" style="color:#2d6a4f" id="s-ps-dist">—</div>
     </div>
   </div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:1rem">
+    <div class="sc" style="background:#fff3cd;border-color:#f0d080">
+      <div class="lb" style="color:#7d4e00">Train the Trainer Attendees</div>
+      <div class="vl" style="color:#7d4e00" id="s-tttc">—</div>
+    </div>
+    <div class="sc" style="background:#fff3cd;border-color:#f0d080">
+      <div class="lb" style="color:#7d4e00">Train the Trainer Distributor Partners</div>
+      <div class="vl" style="color:#7d4e00" id="s-ttt-dist">—</div>
+    </div>
+  </div>
+
   <div class="controls">
     <div class="fg">
-      <button class="fb active" onclick="sf('both',this)">Both events</button>
-      <button class="fb" onclick="sf('ps',this)">Summit only</button>
-      <button class="fb" onclick="sf('ttt',this)">TTT only</button>
+      <button class="fb active" onclick="sf('all',this)">All</button>
+      <button class="fb" onclick="sf('both',this)"><strong>Both events</strong><br><span id="fb-both" style="font-size:11px;opacity:0.8"></span></button>
+      <button class="fb" onclick="sf('ps',this)"><strong>Partner Summit ONLY</strong><br><span id="fb-ps" style="font-size:11px;opacity:0.8"></span></button>
+      <button class="fb" onclick="sf('ttt',this)"><strong>Train the Trainer ONLY</strong><br><span id="fb-ttt" style="font-size:11px;opacity:0.8"></span></button>
+      <button class="fb" onclick="sf('not',this)" style="color:#8b2500"><strong>Not registered</strong><br><span id="fb-not" style="font-size:11px;opacity:0.8"></span></button>
+      <button class="fb" onclick="sf('2025',this)" style="color:#1a3c6e"><strong>2025 vs 2026</strong><br><span id="fb-2025" style="font-size:11px;opacity:0.8"></span></button>
     </div>
     <div class="sw">
       <span class="si">⌕</span>
@@ -147,6 +164,7 @@
     <div class="stbox" id="loading-state">Loading live data…</div>
     <table id="mtable" style="display:none">
       <thead><tr>
+        <th style="width:36px">#</th>
         <th onclick="sortBy('name')">Partner ↕</th>
         <th onclick="sortBy('status')">Status ↕</th>
         <th onclick="sortBy('ps')">Partner Summit ↕</th>
@@ -161,42 +179,82 @@
 </div>
 
 <script>
-// ── Your Apps Script endpoint ─────────────────────────────────────────────
 const API_URL = 'https://script.google.com/macros/s/AKfycbwUILSheBubU2uQwApkhvq-lE1jKv7WlfupHDjBPGHHw1WVo6tXDAghjQAuUZ77pHpn/exec';
 
-// ── Fallback snapshot (March 2026) ────────────────────────────────────────
 const FALLBACK = [{"name":"BeNeLux - Ministry of Beauty","status":"both","ps":["Christian Lataster","Levi Groenberg"],"ttt":["AnnaSofie Damen","Annemieke van Drunen","Bianca de Man","Kim Wigger"]},{"name":"Cyprus - AAE.com","status":"both","ps":["Evi Panayiotou","Panayiotis Panayiotou"],"ttt":["Marianna Papanastasiou"]},{"name":"Denmark - G&G Danmark","status":"ps","ps":["Jesper Löfvall","Renée Löfvall","Theis Löfvall"],"ttt":[]},{"name":"Germany - Wild Beauty","status":"ps","ps":["Bastian Rittgen","Kristin Petrelli","Massimo Petrelli"],"ttt":[]},{"name":"Iceland - Arctic Trading Company","status":"both","ps":["Erla Einarsdóttir"],"ttt":["Erla Einarsdóttir","Nína Leifsdóttir"]},{"name":"Israel - SHH Footwear","status":"both","ps":["Eran Hemed","Guy Spencer","Inbal Spencer"],"ttt":["Guy Spencer"]},{"name":"Italy - IDM","status":"ps","ps":["ivan nasso","michele nardi"],"ttt":[]},{"name":"Lithuania - UAB Grazvalda","status":"both","ps":["Andrius Striaukas","Kristina Petraitiene"],"ttt":["Evaldas Valantiejus","Gabriele Sutkiene","Giedre Azlauskiene","Kristina Petraitiene"]},{"name":"Norway - Cutrin","status":"both","ps":["Iida Lie","Jan Madsen"],"ttt":["Sunniva Hope","Thomas Moe Tonning"]},{"name":"Portugal - Cosmenatura","status":"ps","ps":["Alexandre Costa","Fernando Leal"],"ttt":[]},{"name":"Romania - Beauty One","status":"both","ps":["Alexandru Sofelea","Beauty one medical europa Galani ALice","george draghia","Roxana Sofelea"],"ttt":["amalia matache matache","Claudia Muresan","Gina Aron","Laurentiu teodor","Marian Capet","Vetuta Topuzu"]},{"name":"Slovenia - Pronega","status":"both","ps":["Katarina Mole","Klemen Bajt","Tomaz Leban"],"ttt":["Aska Kajtazović","Manó Kolarič","Matej Prinčič","Matjaž Okorn","Tomaž Turk"]},{"name":"South Africa - Twincare","status":"both","ps":["Andrea Gavriel"],"ttt":["Leann Salzmann","Natasha Summers"]},{"name":"Spain - Hair Addiciton","status":"both","ps":["CARLOS SANAGUSTIN MARTIN","JOSE ANTONIO SALUEÑA","JUAN LUIS ARREGUI"],"ttt":["CARLOS SANAGUSTIN MARTIN","JOSE ANTONIO SALUEÑA","JUAN LUIS ARREGUI"]},{"name":"Sweden - Aktor Produktion","status":"ttt","ps":[],"ttt":["Carina Hokeroth","Sofie Erikssom"]},{"name":"United Kingdom - Sweet Squared","status":"both","ps":["JOHN HURINE","Mark Shorrock","Samantha Sweet","Samuel Sweet","VICTORIA PARKER","VICTORIA SARGESON"],"ttt":["Gary Young","Kiri Constatinou","Laura Van flute","Natalie Ashworth","victoria Parker (Panting)"]}];
 
-let allData = [], curFilter = 'both', sortCol = 'status', sortDir = 1;
+let allData = [], old2025 = [], curFilter = 'all', sortCol = 'name', sortDir = 1;
 
 async function loadData() {
   const btn = document.getElementById('rbtn');
-  btn.classList.add('loading');
-  btn.disabled = true;
+  btn.classList.add('loading'); btn.disabled = true;
   document.getElementById('loading-state').style.display = 'block';
   document.getElementById('mtable').style.display = 'none';
   setBanner('loading-banner', '⟳ Fetching live data from Google Sheets…');
 
   try {
-    // Fetch directly from Apps Script — works when hosted on a proper domain
     const r = await fetch(API_URL);
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const json = await r.json();
     if (json.error) throw new Error(json.error);
-    if (!json.data || json.data.length === 0) throw new Error('No data returned');
+    if (!json.data || !json.data.length) throw new Error('No data returned');
 
-    allData = json.data;
-    const updated = json.updated
-      ? new Date(json.updated).toLocaleString('en-GB', {dateStyle:'medium', timeStyle:'short'})
-      : new Date().toLocaleString('en-GB', {dateStyle:'medium', timeStyle:'short'});
+    // Build set of valid booking names from Streamlined list and map to streamlined names
+    const validBookingNames = new Set();
+    const bookingToStreamlined = {};
+    if (json.distributorNames && json.distributorNames.length) {
+      json.distributorNames.forEach(item => {
+        if (item.booking) {
+          validBookingNames.add(item.booking.toLowerCase().trim());
+          bookingToStreamlined[item.booking.toLowerCase().trim()] = item.streamlined;
+        }
+      });
+    }
 
-    setBanner('success', `<span class="live-dot" style="width:7px;height:7px;border-radius:50%;background:#2d6a4f;display:inline-block;margin-right:4px"></span> Live data loaded · ${updated}`);
+    // Convert to ps/ttt format — only include distributors on the Streamlined list
+    const allFromBookings = json.data.filter(d => !validBookingNames.size || validBookingNames.has(d.name.toLowerCase().trim()));
+    const registered = allFromBookings.map(d => {
+        const ps  = [...new Set((d.events && d.events['JPMS Partner Summit 2026'])  || d.ps  || [])];
+        const ttt = [...new Set((d.events && d.events['JPMS Train the Trainer 2026']) || d.ttt || [])];
+        let status = 'not';
+        if (ps.length && ttt.length) status = 'both';
+        else if (ps.length)  status = 'ps';
+        else if (ttt.length) status = 'ttt';
+        // Use streamlined name for display if not registered
+        const streamlinedName = bookingToStreamlined[d.name.toLowerCase()];
+        const displayName = status === 'not' && streamlinedName ? streamlinedName : d.name;
+        return { name: d.name, displayName, status, ps, ttt };
+      });
+
+    // Add unregistered/unmatched distributors from the Streamlined list
+    if (json.distributorNames && json.distributorNames.length) {
+      const bookedNames = new Set(registered.map(d => d.name.toLowerCase()));
+      json.distributorNames.forEach(item => {
+        const bookingName = item.booking || (typeof item === 'string' ? item : null);
+        const streamName  = item.streamlined || item;
+        const unmatched   = item.unmatched || false;
+
+        if (unmatched && streamName && streamName.trim() !== ',') {
+          const cleanName = streamName.includes(',') ? streamName.split(',').pop().trim() : streamName;
+          registered.push({ name: cleanName, displayName: streamName, status: 'not', ps: [], ttt: [], unmatched: true });
+        } else if (bookingName && !bookedNames.has(bookingName.toLowerCase())) {
+          registered.push({ name: bookingName, displayName: streamName, status: 'not', ps: [], ttt: [] });
+        }
+      });
+    }
+    allData = registered;
+    if (json.old2025) old2025 = json.old2025;
+
+    const updated = new Date(json.updated).toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short'});
+    setBanner('success', `<span class="live-dot" style="width:7px;height:7px;border-radius:50%;background:#003d1a;display:inline-block;margin-right:4px"></span> Live data loaded · ${updated}`);
     document.getElementById('lu').textContent = 'Live · Last updated: ' + updated;
+    if (json.totalDistributors) {
+      document.getElementById('s-total-dist').textContent = json.totalDistributors;
+    }
 
   } catch(err) {
-    // Fall back to snapshot
     allData = FALLBACK;
-    setBanner('error', '⚠ Could not reach live data — showing snapshot from March 2026. (' + err.message + ')');
+    setBanner('error', '⚠ Could not reach live data — showing snapshot. (' + err.message + ')');
     document.getElementById('lu').textContent = 'Snapshot · March 2026';
   }
 
@@ -204,22 +262,32 @@ async function loadData() {
   renderTable();
   document.getElementById('loading-state').style.display = 'none';
   document.getElementById('mtable').style.display = 'table';
-  btn.classList.remove('loading');
-  btn.disabled = false;
+  btn.classList.remove('loading'); btn.disabled = false;
 }
 
 function setBanner(cls, msg) {
-  document.getElementById('banner-area').innerHTML =
-    `<div class="banner ${cls}">${msg}</div>`;
+  document.getElementById('banner-area').innerHTML = `<div class="banner ${cls}">${msg}</div>`;
 }
 
 function updateStats() {
-  document.getElementById('s-tot').textContent = allData.length;
-  document.getElementById('s-bth').textContent = allData.filter(d=>d.status==='both').length;
-  document.getElementById('s-ps' ).textContent = allData.filter(d=>d.status==='ps').length;
-  document.getElementById('s-ttt').textContent = allData.filter(d=>d.status==='ttt').length;
-  document.getElementById('s-psc').textContent = allData.reduce((n,d)=>n+d.ps.length,0);
-  document.getElementById('s-tttc').textContent = allData.reduce((n,d)=>n+d.ttt.length,0);
+  const registered = allData.filter(d=>d.status!=='not');
+  const both = allData.filter(d=>d.status==='both').length;
+  const ps   = allData.filter(d=>d.status==='ps').length;
+  const ttt  = allData.filter(d=>d.status==='ttt').length;
+  const psDist  = allData.filter(d=>d.ps.length>0).length;
+  const tttDist = allData.filter(d=>d.ttt.length>0).length;
+  document.getElementById('s-tot').textContent    = registered.length;
+  document.getElementById('s-psc').textContent    = allData.reduce((n,d)=>n+d.ps.length,0);
+  document.getElementById('s-tttc').textContent   = allData.reduce((n,d)=>n+d.ttt.length,0);
+  document.getElementById('s-ps-dist').textContent  = psDist;
+  document.getElementById('s-ttt-dist').textContent = tttDist;
+  const notReg = allData.filter(d=>d.status==='not').length;
+  const count2025 = allData.filter(d => old2025.includes(d.name.toLowerCase()) && d.status === 'not').length;
+  document.getElementById('fb-both').textContent = '— ' + both + ' Distributor Partners';
+  document.getElementById('fb-not').textContent  = '— ' + notReg + ' Distributor Partners';
+  document.getElementById('fb-ps').textContent   = '— ' + ps + ' Distributor Partners';
+  document.getElementById('fb-ttt').textContent  = '— ' + ttt + ' Distributor Partners';
+  document.getElementById('fb-2025').textContent = '— ' + count2025 + ' Distributor Partners';
 }
 
 function sf(f, btn) {
@@ -238,24 +306,42 @@ function sortBy(col) {
 function renderTable() {
   const q = document.getElementById('search').value.toLowerCase();
   let data = allData.filter(d => {
-    if (curFilter !== 'all') return d.status === curFilter;
-    return true;
-  }).filter(d => !q || d.name.toLowerCase().includes(q));
+    if (curFilter === 'all') return true;
+    if (curFilter === 'not') return d.status === 'not';
+    if (curFilter === '2025') {
+      // Booked in 2025 but NOT registered for 2026 PS or TTT
+      return old2025.includes(d.name.toLowerCase()) && d.status === 'not';
+    }
+    return d.status === curFilter;
+  }).filter(d => {
+    if (!q) return true;
+    const searchName = (d.displayName || d.name).toLowerCase();
+    return searchName.includes(q) || d.name.toLowerCase().includes(q);
+  });
 
   const so = {both:0,ps:1,ttt:2,not:3};
   data.sort((a,b) => {
-    if (sortCol==='name')   return sortDir*a.name.localeCompare(b.name);
-    if (sortCol==='status') return sortDir*(so[a.status]-so[b.status]);
+    const aName = (a.displayName || a.name);
+    const bName = (b.displayName || b.name);
+    // In 'all' view: registered first (alphabetically), then not registered (alphabetically)
+    if (curFilter === 'all') {
+      const aNotReg = a.status === 'not' ? 1 : 0;
+      const bNotReg = b.status === 'not' ? 1 : 0;
+      if (aNotReg !== bNotReg) return aNotReg - bNotReg;
+      return aName.localeCompare(bName);
+    }
+    if (sortCol==='name')   return sortDir * aName.localeCompare(bName);
+    if (sortCol==='status') return sortDir*(so[a.status]-so[b.status]) || aName.localeCompare(bName);
     if (sortCol==='ps')     return sortDir*(b.ps.length-a.ps.length);
     if (sortCol==='ttt')    return sortDir*(b.ttt.length-a.ttt.length);
-    return 0;
+    return aName.localeCompare(bName);
   });
 
-  const tbody = document.getElementById('tbody');
+  const tbody  = document.getElementById('tbody');
   const mcards = document.getElementById('mcards');
 
   if (!data.length) {
-    tbody.innerHTML = `<tr><td colspan="5"><div class="stbox">No partners match this filter.</div></td></tr>`;
+    tbody.innerHTML  = `<tr><td colspan="5"><div class="stbox">No partners match this filter.</div></td></tr>`;
     mcards.innerHTML = `<div class="stbox">No partners match this filter.</div>`;
     return;
   }
@@ -263,7 +349,10 @@ function renderTable() {
   const sb = {both:'b-both',ps:'b-ps',ttt:'b-ttt',not:'b-not'};
   const sl = {both:'✓ Both events',ps:'✓ Summit only',ttt:'✓ TTT only',not:'✗ Not registered'};
 
-  tbody.innerHTML = data.map(d => {
+  let regCount = 0, notCount = 0;
+  const regTotal = curFilter === 'all' ? data.filter(d => d.status !== 'not').length : 0;
+  tbody.innerHTML = data.map((d, i) => {
+    const rowBg = d.status === 'not' ? ' style="background:#ffe5d9"' : '';
     const psc  = d.ps.length  ? `<span class="badge b-reg">✓ ${d.ps.length}</span>`  : `<span class="muted">—</span>`;
     const tttc = d.ttt.length ? `<span class="badge b-ttt">✓ ${d.ttt.length}</span>` : `<span class="muted">—</span>`;
     const all  = [...new Set([...d.ps,...d.ttt])];
@@ -271,42 +360,106 @@ function renderTable() {
       ? `<div class="alist">${all.map(a => {
           const t = [
             d.ps.includes(a)  ? '<span class="badge b-tps">PS</span>'  : '',
-            d.ttt.includes(a) ? '<span class="badge b-tt">TTT</span>' : ''
+            d.ttt.includes(a) ? '<span class="badge b-tt">TTT</span>'  : ''
           ].filter(Boolean).join(' ');
           return `<span>${esc(a)} ${t}</span>`;
         }).join('<br>')}</div>`
       : `<span class="muted">—</span>`;
-    return `<tr>
-      <td class="pname">${esc(d.name)}</td>
+    const nameCell = esc(d.displayName || d.name);
+    let numCell = '<td></td>';
+    if (curFilter === 'all') {
+      const num = d.status === 'not' ? regTotal + (++notCount) : ++regCount;
+      numCell = `<td style="color:var(--ink3);font-size:11px;font-family:'DM Mono',monospace">${num}</td>`;
+    }
+    return `<tr${rowBg}>
+      ${numCell}
+      <td class="pname">${nameCell}</td>
       <td><span class="badge ${sb[d.status]}">${sl[d.status]}</span></td>
       <td>${psc}</td><td>${tttc}</td>
       <td class="ac">${att}</td>
     </tr>`;
   }).join('');
 
-  // Mobile cards
+  let mRegCount=0, mNotCount=0;
+  const mRegTotal = curFilter === 'all' ? data.filter(d=>d.status!=='not').length : 0;
   mcards.innerHTML = data.map(d => {
-    const psNames  = d.ps.length  ? d.ps.map(a=>`<span>${esc(a)} <span class="badge b-tps">PS</span></span>`).join('<br>') : '<span class="muted">—</span>';
+    const cardBg = d.status === 'not' ? 'background:#ffe5d9;border-color:#f4a58a' : '';
+    const psNames  = d.ps.length  ? d.ps.map(a=>`<span>${esc(a)} <span class="badge b-tps">PS</span></span>`).join('<br>')  : '<span class="muted">—</span>';
     const tttNames = d.ttt.length ? d.ttt.map(a=>`<span>${esc(a)} <span class="badge b-tt">TTT</span></span>`).join('<br>') : '<span class="muted">—</span>';
-    return `<div class="mobile-card">
-      <div class="mc-name">${esc(d.name)}</div>
-      <div class="mc-row">
-        <span class="mc-label">Status</span>
-        <span class="badge ${sb[d.status]}">${sl[d.status]}</span>
-      </div>
-      <div class="mc-row">
-        <span class="mc-label">Partner Summit</span>
-        <span class="badge b-reg">${d.ps.length} attendee${d.ps.length!==1?'s':''}</span>
-      </div>
-      <div class="mc-row">
-        <span class="mc-label">Train the Trainer</span>
-        <span class="badge b-ttt">${d.ttt.length} attendee${d.ttt.length!==1?'s':''}</span>
-      </div>
+    const num = curFilter === 'all' ? (d.status==='not' ? mRegTotal+(++mNotCount) : ++mRegCount) : null;
+    const numPrefix = num ? `<span style="color:var(--ink3);font-size:10px;font-family:'DM Mono',monospace;margin-right:6px">${num}.</span>` : '';
+    return `<div class="mobile-card" style="${cardBg}">
+      <div class="mc-name">${numPrefix}${esc(d.displayName || d.name)}</div>
+      <div class="mc-row"><span class="mc-label">Status</span><span class="badge ${sb[d.status]}">${sl[d.status]}</span></div>
+      <div class="mc-row"><span class="mc-label">Partner Summit</span><span class="badge b-reg">${d.ps.length} attendee${d.ps.length!==1?'s':''}</span></div>
+      <div class="mc-row"><span class="mc-label">Train the Trainer</span><span class="badge b-ttt">${d.ttt.length} attendee${d.ttt.length!==1?'s':''}</span></div>
       <div class="mc-att">${psNames}${d.ttt.length ? '<br>'+tttNames : ''}</div>
     </div>`;
   }).join('');
 }
 
+function exportExcel() {
+  const all = allData.slice().sort((a,b) => {
+    const aName = (a.displayName||a.name), bName = (b.displayName||b.name);
+    const aNotReg = a.status==='not'?1:0, bNotReg = b.status==='not'?1:0;
+    if (aNotReg!==bNotReg) return aNotReg-bNotReg;
+    return aName.localeCompare(bName);
+  });
+  const rows = [['#','Distributor','Status','Partner Summit Attendees','Train the Trainer Attendees']];
+  let regCount=0, notCount=0;
+  const regTotal = all.filter(d=>d.status!=='not').length;
+  all.forEach(d => {
+    const num = d.status==='not' ? regTotal+(++notCount) : ++regCount;
+    rows.push([
+      num,
+      d.displayName||d.name,
+      d.status==='both'?'Both events':d.status==='ps'?'Summit only':d.status==='ttt'?'TTT only':'Not registered',
+      d.ps.join(', '),
+      d.ttt.join(', ')
+    ]);
+  });
+  let csv = rows.map(r => r.map(c => '"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'JPMS_Partner_Registrations.csv';
+  a.click();
+}
+
+function exportPDF() {
+  const all = allData.slice().sort((a,b) => {
+    const aName = (a.displayName||a.name), bName = (b.displayName||b.name);
+    const aNotReg = a.status==='not'?1:0, bNotReg = b.status==='not'?1:0;
+    if (aNotReg!==bNotReg) return aNotReg-bNotReg;
+    return aName.localeCompare(bName);
+  });
+  const win = window.open('','_blank');
+  const sl = {both:'Both events',ps:'Summit only',ttt:'TTT only',not:'Not registered'};
+  let regCount=0, notCount=0;
+  const regTotal = all.filter(d=>d.status!=='not').length;
+  const rows = all.map(d => {
+    const num = d.status==='not' ? regTotal+(++notCount) : ++regCount;
+    const bg = d.status==='not' ? 'background:#ffe5d9' : '';
+    return `<tr style="${bg}">
+      <td>${num}</td>
+      <td>${esc(d.displayName||d.name)}</td>
+      <td>${sl[d.status]}</td>
+      <td>${d.ps.map(n=>esc(n)).join('<br>')}</td>
+      <td>${d.ttt.map(n=>esc(n)).join('<br>')}</td>
+    </tr>`;
+  }).join('');
+  win.document.write(`<!DOCTYPE html><html><head><title>JPMS Partner Registrations</title>
+  <style>body{font-family:sans-serif;font-size:11px}h1{font-size:16px;margin-bottom:4px}p{font-size:11px;color:#666;margin-bottom:12px}
+  table{width:100%;border-collapse:collapse}th,td{border:1px solid #ddd;padding:5px 8px;text-align:left;vertical-align:top}
+  th{background:#1a1916;color:#fff;font-size:10px}tr:hover{background:#f9f9f9}
+  @media print{button{display:none}}</style></head><body>
+  <h1>JPMS Partner Summit &amp; Train the Trainer | Live Registrations</h1>
+  <p>Partner Summit 2026 (Oct 23 &amp; 24) &middot; Train the Trainer 2026 (Oct 25 &amp; 26)</p>
+  <button onclick="window.print()" style="margin-bottom:12px;padding:6px 14px;cursor:pointer">Print / Save as PDF</button>
+  <table><thead><tr><th>#</th><th>Distributor</th><th>Status</th><th>Partner Summit Attendees</th><th>Train the Trainer Attendees</th></tr></thead>
+  <tbody>${rows}</tbody></table></body></html>`);
+  win.document.close();
+}
 
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
