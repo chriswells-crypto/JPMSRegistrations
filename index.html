@@ -11,7 +11,7 @@
     --ink:#1a1916; --ink2:#6b6860; --ink3:#a8a49d;
     --green:#2d6a4f; --green-bg:#d8f3dc;
     --red:#8b2500;   --red-bg:#ffe5d9;
-    --amber:#7d4e00; --amber-bg:#fff3cd;
+    --amber:#a0004a; --amber-bg:#ffe0ef;
     --blue:#1a3c6e;  --blue-bg:#dce8f7;
     --border:#e0dbd2; --accent:#c8a96e;
   }
@@ -103,13 +103,27 @@
 </style>
 </head>
 <body>
+<script>
+(function() {
+  const correct = 'International2026';
+  const stored = sessionStorage.getItem('jpms_auth');
+  if (stored !== correct) {
+    const input = prompt('Please enter the password to access this page:');
+    if (input !== correct) {
+      document.documentElement.innerHTML = '<div style="font-family:sans-serif;text-align:center;padding:4rem;color:#8b2500"><h2>Access Denied</h2><p>Incorrect password. Please refresh and try again.</p></div>';
+      throw new Error('Access denied');
+    }
+    sessionStorage.setItem('jpms_auth', correct);
+  }
+})();
+</script>
 <header>
   <div class="hl">
     <h1>JPMS <em>Partner Summit & Train the Trainer</em> | Live Registrations</h1>
     <p>Partner Summit 2026 (Oct 23 & 24) · Train the Trainer 2026 (Oct 25 & 26)</p>
   </div>
   <div class="hbtns">
-    <span style="font-family:'DM Mono',monospace;font-size:10px;color:#a8a49d;margin-right:8px">v1.2</span>
+    <span style="font-family:'DM Mono',monospace;font-size:10px;color:#a8a49d;margin-right:8px">v2.0</span>
     <button class="btn" onclick="exportExcel()">⬇ Excel</button>
     <button class="btn" onclick="exportPDF()">⬇ PDF</button>
     <button class="btn" id="rbtn" onclick="loadData()"><span class="spin">↻</span> Refresh</button>
@@ -127,32 +141,28 @@
   <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:12px">
     <div class="sc" style="background:#d8f3dc;border-color:#a8d8b8">
       <div class="lb" style="color:#2d6a4f">Partner Summit Attendees</div>
-      <div class="vl" style="color:#2d6a4f" id="s-psc">—</div>
+      <div class="vl" style="color:#2d6a4f;display:flex;align-items:baseline;gap:8px" id="s-psc">—<span style="font-size:1rem;color:#2d6a4f;opacity:0.5">(Last Year: 89)</span></div>
     </div>
     <div class="sc" style="background:#d8f3dc;border-color:#a8d8b8">
       <div class="lb" style="color:#2d6a4f">Partner Summit Distributor Partners</div>
-      <div class="vl" style="color:#2d6a4f" id="s-ps-dist">—</div>
+      <div class="vl" style="color:#2d6a4f;display:flex;align-items:baseline;gap:8px" id="s-ps-dist">—<span style="font-size:1rem;color:#2d6a4f;opacity:0.5">(Last Year: 36)</span></div>
     </div>
   </div>
   <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:1rem">
-    <div class="sc" style="background:#fff3cd;border-color:#f0d080">
-      <div class="lb" style="color:#7d4e00">Train the Trainer Attendees</div>
-      <div class="vl" style="color:#7d4e00" id="s-tttc">—</div>
+    <div class="sc" style="background:#ffe0ef;border-color:#f4a0c0">
+      <div class="lb" style="color:#a0004a">Train the Trainer Attendees</div>
+      <div class="vl" style="color:#a0004a;display:flex;align-items:baseline;gap:8px" id="s-tttc">—<span style="font-size:1rem;color:#a0004a;opacity:0.5">(Last Year: 90)</span></div>
     </div>
-    <div class="sc" style="background:#fff3cd;border-color:#f0d080">
-      <div class="lb" style="color:#7d4e00">Train the Trainer Distributor Partners</div>
-      <div class="vl" style="color:#7d4e00" id="s-ttt-dist">—</div>
+    <div class="sc" style="background:#ffe0ef;border-color:#f4a0c0">
+      <div class="lb" style="color:#a0004a">Train the Trainer Distributor Partners</div>
+      <div class="vl" style="color:#a0004a;display:flex;align-items:baseline;gap:8px" id="s-ttt-dist">—<span style="font-size:1rem;color:#a0004a;opacity:0.5">(Last Year: 22)</span></div>
     </div>
   </div>
 
   <div class="controls">
     <div class="fg">
-      <button class="fb active" onclick="sf('all',this)">All</button>
-      <button class="fb" onclick="sf('both',this)"><strong>Both events</strong><br><span id="fb-both" style="font-size:11px;opacity:0.8"></span></button>
-      <button class="fb" onclick="sf('ps',this)"><strong>Partner Summit ONLY</strong><br><span id="fb-ps" style="font-size:11px;opacity:0.8"></span></button>
-      <button class="fb" onclick="sf('ttt',this)"><strong>Train the Trainer ONLY</strong><br><span id="fb-ttt" style="font-size:11px;opacity:0.8"></span></button>
+      <button class="fb active" onclick="sf('all',this)">All Bookings</button>
       <button class="fb" onclick="sf('not',this)" style="color:#8b2500"><strong>Not registered</strong><br><span id="fb-not" style="font-size:11px;opacity:0.8"></span></button>
-      <button class="fb" onclick="sf('2025',this)" style="color:#1a3c6e"><strong>2025 vs 2026</strong><br><span id="fb-2025" style="font-size:11px;opacity:0.8"></span></button>
     </div>
     <div class="sw">
       <span class="si">⌕</span>
@@ -168,7 +178,7 @@
         <th onclick="sortBy('name')">Partner ↕</th>
         <th onclick="sortBy('status')">Status ↕</th>
         <th onclick="sortBy('ps')">Partner Summit ↕</th>
-        <th onclick="sortBy('ttt')" style="color:var(--amber)">Train the Trainer ↕</th>
+        <th onclick="sortBy('ttt')" style="color:#a0004a">Train the Trainer ↕</th>
         <th class="ac">Registered attendees</th>
       </tr></thead>
       <tbody id="tbody"></tbody>
@@ -243,7 +253,26 @@ async function loadData() {
       });
     }
     allData = registered;
-    if (json.old2025) old2025 = json.old2025;
+    if (json.old2025) {
+      old2025 = json.old2025;
+      // Add any 2025 distributors not already in allData
+      const existingNames = new Set(allData.map(d => (d.displayName||d.name).toLowerCase()));
+      old2025.forEach(oldName => {
+        // Check if already represented in allData
+        const alreadyIn = allData.some(d => {
+          const n = d.name.toLowerCase();
+          const dn = (d.displayName||'').toLowerCase();
+          return n.includes(oldName) || oldName.includes(n) ||
+                 dn.includes(oldName) || oldName.includes(dn) ||
+                 oldName.split(/[\s\-,&]+/).filter(w=>w.length>=5).some(w => n.includes(w) || dn.includes(w));
+        });
+        if (!alreadyIn) {
+          // Format the name nicely — capitalise each word
+          const niceName = oldName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+          allData.push({ name: niceName, displayName: niceName, status: 'not', ps: [], ttt: [], from2025Only: true });
+        }
+      });
+    }
 
     const updated = new Date(json.updated).toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short'});
     setBanner('success', `<span class="live-dot" style="width:7px;height:7px;border-radius:50%;background:#003d1a;display:inline-block;margin-right:4px"></span> Live data loaded · ${updated}`);
@@ -277,23 +306,19 @@ function updateStats() {
   const psDist  = allData.filter(d=>d.ps.length>0).length;
   const tttDist = allData.filter(d=>d.ttt.length>0).length;
   document.getElementById('s-tot').textContent    = registered.length;
-  document.getElementById('s-psc').textContent    = allData.reduce((n,d)=>n+d.ps.length,0);
-  document.getElementById('s-tttc').textContent   = allData.reduce((n,d)=>n+d.ttt.length,0);
-  document.getElementById('s-ps-dist').textContent  = psDist;
-  document.getElementById('s-ttt-dist').textContent = tttDist;
+  document.getElementById('s-psc').innerHTML    = allData.reduce((n,d)=>n+d.ps.length,0) + ' <span style="font-size:1rem;opacity:0.5">(Last Year: 89)</span>';
+  document.getElementById('s-tttc').innerHTML   = allData.reduce((n,d)=>n+d.ttt.length,0) + ' <span style="font-size:1rem;opacity:0.5">(Last Year: 90)</span>';
+  document.getElementById('s-ps-dist').innerHTML  = psDist + ' <span style="font-size:1rem;opacity:0.5">(Last Year: 36)</span>';
+  document.getElementById('s-ttt-dist').innerHTML = tttDist + ' <span style="font-size:1rem;opacity:0.5">(Last Year: 22)</span>';
   const notReg = allData.filter(d=>d.status==='not').length;
-  const count2025 = allData.filter(d => d.status === 'not' && old2025.some(oldName => {
+  const count2025 = allData.filter(d => d.from2025Only || (d.status === 'not' && old2025.some(oldName => {
     const n = d.name.toLowerCase();
     const dn = (d.displayName||'').toLowerCase();
     return n.includes(oldName) || oldName.includes(n) ||
            dn.includes(oldName) || oldName.includes(dn) ||
            oldName.split(/[\s\-]+/).filter(w=>w.length>=5).some(w => n.includes(w) || dn.includes(w));
-  })).length;
-  document.getElementById('fb-both').textContent = '— ' + both + ' Distributor Partners';
+  }))).length;
   document.getElementById('fb-not').textContent  = '— ' + notReg + ' Distributor Partners';
-  document.getElementById('fb-ps').textContent   = '— ' + ps + ' Distributor Partners';
-  document.getElementById('fb-ttt').textContent  = '— ' + ttt + ' Distributor Partners';
-  document.getElementById('fb-2025').textContent = '— ' + count2025 + ' Distributor Partners';
 }
 
 function sf(f, btn) {
@@ -315,14 +340,12 @@ function renderTable() {
     if (curFilter === 'all') return true;
     if (curFilter === 'not') return d.status === 'not';
     if (curFilter === '2025') {
-      // Booked in 2025 but NOT registered for 2026 PS or TTT
-      // Match by checking if any old2025 name is contained in or contains the booking name
+      if (d.from2025Only) return true;
       return d.status === 'not' && old2025.some(oldName => {
         const n = d.name.toLowerCase();
         const dn = (d.displayName||'').toLowerCase();
         return n.includes(oldName) || oldName.includes(n) ||
                dn.includes(oldName) || oldName.includes(dn) ||
-               // word overlap — match key words 5+ chars
                oldName.split(/[\s\-]+/).filter(w=>w.length>=5).some(w => n.includes(w) || dn.includes(w));
       });
     }
@@ -380,6 +403,16 @@ function renderTable() {
         }).join('<br>')}</div>`
       : `<span class="muted">—</span>`;
     const nameCell = esc(d.displayName || d.name);
+    const attended2025 = old2025.some(oldName => {
+      const n = d.name.toLowerCase();
+      const dn = (d.displayName||'').toLowerCase();
+      return n.includes(oldName) || oldName.includes(n) ||
+             dn.includes(oldName) || oldName.includes(dn) ||
+             oldName.split(/[\s\-,&]+/).filter(w=>w.length>=5).some(w => n.includes(w) || dn.includes(w));
+    });
+    const nameCellHtml = attended2025
+      ? `${nameCell}<br><em style="font-size:10px;color:var(--ink3);font-weight:400">Attended in 2025</em>`
+      : `${nameCell}<br><em style="font-size:10px;color:#c0392b;font-weight:400">Did not attend in 2025</em>`;
     let numCell = '<td></td>';
     if (curFilter === 'all') {
       const num = d.status === 'not' ? regTotal + (++notCount) : ++regCount;
@@ -387,7 +420,7 @@ function renderTable() {
     }
     return `<tr${rowBg}>
       ${numCell}
-      <td class="pname">${nameCell}</td>
+      <td class="pname">${nameCellHtml}</td>
       <td><span class="badge ${sb[d.status]}">${sl[d.status]}</span></td>
       <td>${psc}</td><td>${tttc}</td>
       <td class="ac">${att}</td>
@@ -402,8 +435,15 @@ function renderTable() {
     const tttNames = d.ttt.length ? d.ttt.map(a=>`<span>${esc(a)} <span class="badge b-tt">TTT</span></span>`).join('<br>') : '<span class="muted">—</span>';
     const num = curFilter === 'all' ? (d.status==='not' ? mRegTotal+(++mNotCount) : ++mRegCount) : null;
     const numPrefix = num ? `<span style="color:var(--ink3);font-size:10px;font-family:'DM Mono',monospace;margin-right:6px">${num}.</span>` : '';
+    const mAttended2025 = old2025.some(oldName => {
+      const n = d.name.toLowerCase();
+      const dn = (d.displayName||'').toLowerCase();
+      return n.includes(oldName) || oldName.includes(n) ||
+             dn.includes(oldName) || oldName.includes(dn) ||
+             oldName.split(/[\s\-,&]+/).filter(w=>w.length>=5).some(w => n.includes(w) || dn.includes(w));
+    });
     return `<div class="mobile-card" style="${cardBg}">
-      <div class="mc-name">${numPrefix}${esc(d.displayName || d.name)}</div>
+      <div class="mc-name">${numPrefix}${esc(d.displayName || d.name)}${mAttended2025 ? '<br><em style="font-size:10px;color:var(--ink3);font-weight:400">Attended in 2025</em>' : '<br><em style="font-size:10px;color:#c0392b;font-weight:400">Did not attend in 2025</em>'}</div>
       <div class="mc-row"><span class="mc-label">Status</span><span class="badge ${sb[d.status]}">${sl[d.status]}</span></div>
       <div class="mc-row"><span class="mc-label">Partner Summit</span><span class="badge b-reg">${d.ps.length} attendee${d.ps.length!==1?'s':''}</span></div>
       <div class="mc-row"><span class="mc-label">Train the Trainer</span><span class="badge b-ttt">${d.ttt.length} attendee${d.ttt.length!==1?'s':''}</span></div>
