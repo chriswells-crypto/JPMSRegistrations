@@ -141,21 +141,21 @@
   <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:12px">
     <div class="sc" style="background:#d8f3dc;border-color:#a8d8b8">
       <div class="lb" style="color:#2d6a4f">Partner Summit Attendees</div>
-      <div class="vl" style="color:#2d6a4f;display:flex;align-items:baseline;gap:8px" id="s-psc">—<span style="font-size:1rem;color:#2d6a4f;opacity:0.5">(2025: 89)</span></div>
+      <div class="vl" style="color:#2d6a4f;display:flex;align-items:baseline;gap:8px" id="s-psc">—<span style="font-size:1rem;color:#2d6a4f;opacity:0.5">(Last Year: 89)</span></div>
     </div>
     <div class="sc" style="background:#d8f3dc;border-color:#a8d8b8">
       <div class="lb" style="color:#2d6a4f">Partner Summit Distributor Partners</div>
-      <div class="vl" style="color:#2d6a4f;display:flex;align-items:baseline;gap:8px" id="s-ps-dist">—<span style="font-size:1rem;color:#2d6a4f;opacity:0.5">(2025: 36)</span></div>
+      <div class="vl" style="color:#2d6a4f;display:flex;align-items:baseline;gap:8px" id="s-ps-dist">—<span style="font-size:1rem;color:#2d6a4f;opacity:0.5">(Last Year: 36)</span></div>
     </div>
   </div>
   <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:1rem">
     <div class="sc" style="background:#ffe0ef;border-color:#f4a0c0">
       <div class="lb" style="color:#a0004a">Train the Trainer Attendees</div>
-      <div class="vl" style="color:#a0004a;display:flex;align-items:baseline;gap:8px" id="s-tttc">—<span style="font-size:1rem;color:#a0004a;opacity:0.5">(2025: 90)</span></div>
+      <div class="vl" style="color:#a0004a;display:flex;align-items:baseline;gap:8px" id="s-tttc">—<span style="font-size:1rem;color:#a0004a;opacity:0.5">(Last Year: 90)</span></div>
     </div>
     <div class="sc" style="background:#ffe0ef;border-color:#f4a0c0">
       <div class="lb" style="color:#a0004a">Train the Trainer Distributor Partners</div>
-      <div class="vl" style="color:#a0004a;display:flex;align-items:baseline;gap:8px" id="s-ttt-dist">—<span style="font-size:1rem;color:#a0004a;opacity:0.5">(2025: 22)</span></div>
+      <div class="vl" style="color:#a0004a;display:flex;align-items:baseline;gap:8px" id="s-ttt-dist">—<span style="font-size:1rem;color:#a0004a;opacity:0.5">(Last Year: 22)</span></div>
     </div>
   </div>
 
@@ -306,10 +306,10 @@ function updateStats() {
   const psDist  = allData.filter(d=>d.ps.length>0).length;
   const tttDist = allData.filter(d=>d.ttt.length>0).length;
   document.getElementById('s-tot').textContent    = registered.length;
-  document.getElementById('s-psc').innerHTML    = allData.reduce((n,d)=>n+d.ps.length,0) + ' <span style="font-size:1rem;opacity:0.5">(2025: 89)</span>';
-  document.getElementById('s-tttc').innerHTML   = allData.reduce((n,d)=>n+d.ttt.length,0) + ' <span style="font-size:1rem;opacity:0.5">(2025: 90)</span>';
-  document.getElementById('s-ps-dist').innerHTML  = psDist + ' <span style="font-size:1rem;opacity:0.5">(2025: 36)</span>';
-  document.getElementById('s-ttt-dist').innerHTML = tttDist + ' <span style="font-size:1rem;opacity:0.5">(2025: 22)</span>';
+  document.getElementById('s-psc').innerHTML    = allData.reduce((n,d)=>n+d.ps.length,0) + ' <span style="font-size:1rem;opacity:0.5">(Last Year: 89)</span>';
+  document.getElementById('s-tttc').innerHTML   = allData.reduce((n,d)=>n+d.ttt.length,0) + ' <span style="font-size:1rem;opacity:0.5">(Last Year: 90)</span>';
+  document.getElementById('s-ps-dist').innerHTML  = psDist + ' <span style="font-size:1rem;opacity:0.5">(Last Year: 36)</span>';
+  document.getElementById('s-ttt-dist').innerHTML = tttDist + ' <span style="font-size:1rem;opacity:0.5">(Last Year: 22)</span>';
   const notReg = allData.filter(d=>d.status==='not').length;
   const count2025 = allData.filter(d => d.from2025Only || (d.status === 'not' && old2025.some(oldName => {
     const n = d.name.toLowerCase();
