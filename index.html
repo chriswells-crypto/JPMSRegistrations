@@ -133,11 +133,6 @@
 <div class="main">
   <div id="banner-area"></div>
 
-
-  <div class="stats-row">
-    <div class="sc" style="background:#c8a96e;border-color:#b8935a"><div class="lb" style="color:rgba(255,255,255,0.8)"># of Distributors registered for both events, Summit only, or TTT only</div><div class="vl" style="color:#fff;display:flex;align-items:baseline;gap:4px"><span id="s-tot">—</span><span style="font-size:1rem;opacity:0.8">/ <span id="s-total-dist">—</span></span></div></div>
-  </div>
-
   <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:12px">
     <div class="sc" style="background:#d8f3dc;border-color:#a8d8b8">
       <div class="lb" style="color:#2d6a4f">Partner Summit Attendees</div>
@@ -277,9 +272,7 @@ async function loadData() {
     const updated = new Date(json.updated).toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short'});
     setBanner('success', `<span class="live-dot" style="width:7px;height:7px;border-radius:50%;background:#003d1a;display:inline-block;margin-right:4px"></span> Live data loaded · ${updated}`);
     document.getElementById('lu').textContent = 'Live · Last updated: ' + updated;
-    if (json.totalDistributors) {
-      document.getElementById('s-total-dist').textContent = json.totalDistributors;
-    }
+
 
   } catch(err) {
     allData = FALLBACK;
@@ -305,7 +298,6 @@ function updateStats() {
   const ttt  = allData.filter(d=>d.status==='ttt').length;
   const psDist  = allData.filter(d=>d.ps.length>0).length;
   const tttDist = allData.filter(d=>d.ttt.length>0).length;
-  document.getElementById('s-tot').textContent    = registered.length;
   document.getElementById('s-psc').innerHTML    = allData.reduce((n,d)=>n+d.ps.length,0) + ' <span style="font-size:1rem;opacity:0.5">(Last Year: 89)</span>';
   document.getElementById('s-tttc').innerHTML   = allData.reduce((n,d)=>n+d.ttt.length,0) + ' <span style="font-size:1rem;opacity:0.5">(Last Year: 90)</span>';
   document.getElementById('s-ps-dist').innerHTML  = psDist + ' <span style="font-size:1rem;opacity:0.5">(Last Year: 36)</span>';
